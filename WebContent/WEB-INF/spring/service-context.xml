@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+ 
+   <context:annotation-config/>
+   
+<!--    <mvc:annotation-driven/>
+   <mvc:resources mapping="/resource/**" location="/resource/" />
+ 
+   <context:component-scan base-package="com.newlecture.web.controller"/>
+   
+   <bean name="multipartResolver"
+      class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+      <property name="maxUploadSize" value="100000000"></property>
+   </bean>  -->
+	
+	<!-- 데이터 서비스 설정 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
+	    <property name="url" value="jdbc:sqlserver://db.newlecture.com:1433;database=newlecdb"></property>
+	    <property name="username" value="mssql"></property>
+	    <property name="password" value="classf"></property>
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" 
+			value="classpath:com/newlecture/web/dao/mybatis/mapper/*.xml" />
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="memberDao" class = "com.newlecture.web.dao.mybatis.MybatisMemberDao"></bean>
+	<bean id="noticeDao" class = "com.newlecture.web.dao.mybatis.MybatisNoticeDao"></bean>
+	<bean id="noticeFileDao" class = "com.newlecture.web.dao.mybatis.MybatisNoticeFileDao"></bean>
+
+<!-- 
+      <bean id="prince" class = "com.newlecture.web.dao.mybatis.MybatisNoticeDao"></bean>
+      
+      <bean id="logBeforeAdvice" class="com.newlecture.web.aop.LogBeforeAdvice"/>
+      <bean id="logAroundAdvice" class="com.newlecture.web.aop.LogAroundAdvice"/>
+      
+      <bean id="" class="org.springframework.aop.support.NameMatchMethodPointcut">
+        <property name="mappedNames">
+        	<list>
+        	    <value>getNotices</value>
+        	</list>
+        </property>
+      </bean>
+      
+      <bean id="noticeAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+          <property name="pointcut" ref="noticePointcut"></property>
+          <property name="advice" ref="logBeforeAdvice"></property>
+      </bean>
+      
+      <bean id="noticeDao" class="org.springframework.aop.framework.ProxyFactoryBean">
+         <property name="target" ref="prince"/>
+         <property name="InterceptorNames">
+            <list>
+            	<value>noticeAdvisor</value>
+                <value>logBeforeAdvice</value>
+                <value>logAroundAdvice</value>
+            </list>
+         </property>
+      </bean>
+ -->
+ 
+  <!-- <bean id="/customer/notice" class="com.newlecture.web.controller.SpringNoticeController"></bean> -->
+
+</beans>
